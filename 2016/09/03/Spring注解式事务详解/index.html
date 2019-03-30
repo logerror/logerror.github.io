@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="樊冬">
 <meta property="og:description" content="Spring注解式事务详解">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-30T06:38:25.389Z">
+<meta property="og:updated_time" content="2019-03-30T06:42:36.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring注解式事务详解">
 <meta name="twitter:description" content="Spring注解式事务详解">
@@ -382,25 +382,40 @@
 <table>
 <thead>
 <tr>
-<th>一个普通标题</th>
-<th>一个普通标题</th>
-<th>一个普通标题</th>
+<th>org.hibernate</th>
+<th>javax.persistence</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>短文本</td>
-<td>中等文本</td>
-<td>稍微长一点的文本</td>
+<td>cfg.Configuration</td>
+<td>Persistence</td>
+<td>读取配置信息</td>
 </tr>
 <tr>
-<td>稍微长一点的文本</td>
-<td>短文本</td>
-<td>中等文本</td>
+<td>SessionFactory</td>
+<td>EntityManagerFactory</td>
+<td>用于创建会话,实体管理器的工厂类</td>
+</tr>
+<tr>
+<td>Session</td>
+<td>EntityManager</td>
+<td>提供实体操作API,管理事务,创建查询</td>
+</tr>
+<tr>
+<td>Transaction</td>
+<td>EntityTransaction</td>
+<td>管理事务</td>
+</tr>
+<tr>
+<td>Query</td>
+<td>Query</td>
+<td>执行查询</td>
 </tr>
 </tbody>
 </table>
-<p>​org.hibernate|javax.persistence|说明<br>​cfg.Configuration|Persistence|读取配置信息<br>​SessionFactory|EntityManagerFactory|用于创建会话,实体管理器的工厂类<br>​Session|EntityManager|提供实体操作API,管理事务,创建查询<br>​Transaction|EntityTransaction|管理事务<br>​Query|Query|执行查询     </p>
+<p>​<br>​</p>
 
       
     </div>

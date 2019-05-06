@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="樊冬">
 <meta property="og:description" content="websoket构建站内通知">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-06T06:38:15.259Z">
+<meta property="og:updated_time" content="2019-05-06T06:39:31.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="websoket构建站内通知">
 <meta name="twitter:description" content="websoket构建站内通知">
@@ -381,7 +381,7 @@
 <li>使用主流长连接框架netty实现websocket功能。</li>
 <li>使用jJavaEE7支持的@ServerEndpoint注解实现websocket。</li>
 </ol>
-<p>若使用netty实现，性能会较好，但需要新启端口用于netty的连接与端口监听（默认为8888），使用注解实现则可以共用web 8080端口，减轻了实施的工作量，企业用户也无需新开防火墙申请变更，因此使用@ServerEndpoint实现websocket达到实时发送信息的目的。</p>
+<p>若使用netty实现，性能会较好，但需要新启端口用于netty的连接与端口监听（默认为8888），使用注解实现则可以共用web 8080端口，减轻了实施的工作量，企业用户也无需新开防火墙申请变更，因此使用@ServerEndpoint实现websocket达到实时发送信息的目的。（在其他章节会提到如何使用netty来做心跳检测）</p>
 <p><strong><strong>详细实现</strong></strong>    </p>
 <p>1.在类上使用注解@ServerEndpoint，并指定编解码类，因为实际场景的数据不只是字符串那么简单，一般都是json对象。还需实现  onOpen onClose onError三个方法，用于处理打开，关闭，异常时的处理场景。 同时onMessage方法用户处理客户端向服务端发送信息时的处理逻辑。       </p>
 <pre><code>import net.sf.json.JSONObject;

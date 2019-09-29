@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[使用RateLimiter限制访问频率]]></title>
+    <url>%2F2019%2F06%2F12%2F%E4%BD%BF%E7%94%A8RateLimiter%E9%99%90%E5%88%B6%E8%AE%BF%E9%97%AE%E9%A2%91%E7%8E%87%2F</url>
+    <content type="text"><![CDATA[背景通过查看接口访问日志发现某个注册接口请求量突然暴涨，并引发连锁反应，导致整个系统变慢。系统已经对接口做了做了权限认证，包含token认证，时效认证，禁用启用等功能，但没有对访问频率做限制，除了需要优化处理逻辑外，也要加上对接口的访问频率限制，以防止非预期的请求对系统压力过大而引起的系统瘫痪，当流量过大时，可以采取拒绝或者引流等机制。 原因及方案分析 常用的限流算法有两种：漏桶算法和令牌桶算法。 漏桶(Leaky Bucket)算法思路很简单,水(请求)先进入到漏桶里,漏桶以一定的速度出水(接口有响应速率),当水流入速度过大会直接溢出(访问频率超过接口响应速率),然后就拒绝请求,可以看出漏桶算法能强行限制数据的传输速率。但是漏桶的漏出速率是固定的参数,所以,即使网络中不存在资源冲突(没有发生拥塞),漏桶算法也不能使流突发(burst)到端口速率.因此,漏桶算法对于存在突发特性的流量来说缺乏效率.令牌桶算法(Token Bucket)和 Leaky Bucket 效果一样但方向相反的算法,更加容易理解.随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.令牌桶的另外一个好处是可以方便的改变速度. 一旦需要提高速率,则按需提高放入桶中的令牌的速率. 一般会定时(比如100毫秒)往桶中增加一定数量的令牌, 有些变种算法则实时的计算应该增加的令牌的数量. 解决思路 使用令牌桶算法限制接口访问频率sss。 详细实现 Google开源工具包Guava提供了限流工具类RateLimiter，该类基于令牌桶算法来完成限流，非常易于使用。在项目中用了以下实现 1.频率是可以设置的，所以要存储初始值，频率发生改变时调用setRate方法即可，需要注意的是setRate的意义是每秒允许多少次访问，参数是一个double类型的值 RateLimiter rateLimit = RestComponentFactory.interfaceRateMap.getOrDefault(interfaceVo.getToken(), null); Double newRateLimit = interfaceVo.getQps(); if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){ if(rateLimit == null){ rateLimit = RateLimiter.create(interfaceVo.getQps()); RestComponentFactory.interfaceRateMap.put(interfaceVo.getToken(), rateLimit); }else{ if(rateLimit.getRate() != newRateLimit){ rateLimit.setRate(newRateLimit); } } boolean rateFlag = rateLimit.tryAcquire(); if(!rateFlag){ throw new Exception470(); } } 补充说明RateLimiter类位于 com.google.common.util.concurrent.RateLimiter &lt;artifactId&gt;guava&lt;/artifactId&gt; &lt;groupId&gt;com.google.guava&lt;/groupId&gt; ​​]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>qps ratelimiter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[websoket构建站内通知]]></title>
+    <url>%2F2019%2F04%2F10%2Fwebsocket%E6%9E%84%E5%BB%BA%E7%AB%99%E5%86%85%E9%80%9A%E7%9F%A5%2F</url>
+    <content type="text"><![CDATA[背景传统的报表或者统计展示都是统计一段时间的数据，然后由网页发起接口调用进而展示数据，对于一些不需要实时展示的内容来说是可以，但对于一些需要即时看到并处理的信息则可能会延后。 原因 网页端定时获取数据可能会造成信息的滞后，对于一些需要立即处理的事件可能会延误。 解决思路 不再使用前端定时调用接口的形式获取数据，使用websocket来即时从后台推送数据到前端。 使用主流长连接框架netty实现websocket功能。 使用jJavaEE7支持的@ServerEndpoint注解实现websocket。 若使用netty实现，性能会较好，但需要新启端口用于netty的连接与端口监听（默认为8888），使用注解实现则可以共用web 8080端口，减轻了实施的工作量，企业用户也无需新开防火墙申请变更，因此使用@ServerEndpoint实现websocket达到实时发送信息的目的。（在之前的章节提到了如何使用netty来做心跳检测以及信息传递） 详细实现 1.在类上使用注解@ServerEndpoint，并指定编解码类，因为实际场景的数据不只是字符串那么简单，一般都是json对象。还需实现 onOpen onClose onError三个方法，用于处理打开，关闭，异常时的处理场景。 同时onMessage方法用户处理客户端向服务端发送信息时的处理逻辑。 import net.sf.json.JSONObject; import org.slf4j.Logger; import org.slf4j.LoggerFactory; import java.io.IOException; import javax.websocket.*; import javax.websocket.server.ServerEndpoint; @ServerEndpoint(value = &quot;/websocket&quot;, encoders = {MessageEncoder.class }) public class SystemRemindSocketServer { private Logger logger = LoggerFactory.getLogger(SystemRemindSocketServer.class); @OnMessage public void onMessage(String message, Session session) throws IOException, InterruptedException, EncodeException { //暂时无需处理网页端发送的信息 //test // for(int i = 0;i&lt;5;i++){ // JSONObject data = new JSONObject(); // data.put(&quot;icon&quot;,&quot;ts-component&quot;); // data.put(&quot;taskId&quot;,1386); // data.put(&quot;time&quot;,&quot;2019-03-26 14:31:30&quot;); // data.put(&quot;title&quot;,&quot;当时明月在,曾照彩云归.&quot;); // data.put(&quot;link&quot;,&quot;/&quot;); // data.put(&quot;template&quot;,&quot;balantflow.systemremind.message.flow&quot;); // session.getBasicRemote().sendText(data.toString()); // } } @OnOpen public void onOpen(Session session) { String userId = session.getUserPrincipal().getName(); String sessionId = session.getId(); SystemRemindMessageManager.sessionMap.put(userId, session); } @OnClose public void onClose(Session session) { String userId = session.getUserPrincipal().getName(); SystemRemindMessageManager.sessionMap.remove(userId); } @OnError public void onError(Throwable t) { logger.error(&quot;web socket error ,&quot; + t.getMessage()); } } 2.编解码类的实现，直接用jsonobject格式化即可 public class MessageEncoder implements Encoder.Text&lt;SystemRemindMessageVo&gt; { @Override public void destroy() { } @Override public void init(EndpointConfig arg0) { } @Override public String encode(SystemRemindMessageVo messagepojo) throws EncodeException { try { return JSONObject.fromObject(messagepojo).toString(); } catch (Exception e) { return null; } } } 3.前端建立连接与数据处理 $(function(){ //启动时建立连接 var notifyws = new WebSocket(&quot;ws://localhost:8080/balantflow/websocket&quot;); notifyws.onopen = function(evt) { //console.log(evt); }; //后台发送消息时的处理逻辑 notifyws.onmessage = function(evt) { var newnotify = []; newnotify.push(JSON.parse(evt.data)); updateInstant(newnotify); }; //断开后重新连接 notifyws.onclose = function(evt) { notifyws = new WebSocket(&quot;ws://localhost:8080/balantflow/websocket&quot;); }; }) 补充说明部署环境时要注意修改websocket配置，因为在用户机器上连接localhost:8080是没用的，要改为具体的websocket地址 ​​]]></content>
+      <categories>
+        <category>websocket</category>
+      </categories>
+      <tags>
+        <tag>websocket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Java进程间共享锁]]></title>
+    <url>%2F2017%2F08%2F12%2FJava%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E9%94%81%2F</url>
+    <content type="text"><![CDATA[背景业务系统运行时产生了大量的小文件（大小在10kb左右，包含一些表单的内容，rest接口的访问记录），考虑到将这些内容存储在数据库中对数据库压力较大，因此转为文件存储，但由于restful接口访问频繁，导致产生了大量的小文件，最终导致服务器inode占用率过高，触发告警 原因 什么是inode?inode包含文件的元信息，具体来说有以下内容： * 文件的字节数 * 文件拥有者的User ID * 文件的Group ID * 文件的读、写、执行权限 * 文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。 * 链接数，即有多少文件名指向这个inode * 文件数据block的位置 大量小文件的产生导致服务器inode占用过高，触发告警，如果inode继续增加可能会导致无法创建文件。 解决思路 将多个小文件合并为一个大文件处理，思路有很多： 可以合并为一个大的文本文件，每次记录内容的偏移量，读的时候根据起始位置和偏移量来获取内容。 仍保持单个文件的独立性，将多个文件合并为一个大的压缩文件。 经过尝试发现，方案1可能会导致读写错误，具体表现为文本不但会增加也可能会删除，删除后要更新所有文件的起始值和偏移值，这反而加重了数据库的负担，而且偏移量一旦计算错误将会导致所有的文件内容读到的结果都是错误的。 方案二保持了文件的独立性，只需记录文件路径即可，即便某个文件路径错误也不影响其他文件的读取，同理，删除也不会影响其他的文件读取，唯一要解决的便是并发环境即分布式环境的问题（同时读写文件），经测试和运行满足生产环境需求，且由于是一个压缩文件，inode占用率不会飙升，因此采用了方案二，并已生产部署。 在此不详细讨论如何生成并读写压缩文件（将产生的多个文件放入压缩包中即可），着重说明如何保证同一时刻一个压缩文件不能被同时写入。 详细实现 Java 提供了文件锁FileLock类，利用这个类可以控制不同程序(JVM)对同一文件的并发访问，实现进程间文件同步操作。FileLock是java 1.4 版本后出现的一个类，它可以通过对一个可写文件(w)加锁，保证同时只有一个进程可以拿到文件的锁，这个进程从而可以对文件做访问；而其它拿不到锁的进程要么选择被挂起等待，要么选择去做一些其它的事情， 这样的机制保证了众进程可以顺序访问该文件。也可以看出，能够利用文件锁的这种性质，在一些场景下，虽然我们不需要操作某个文件， 但也可以通过 FileLock 来进行并发控制，保证进程的顺序执行，避免数据错误。 1.保证获取到的文件对象唯一，每次写入动作时取到的文件是同一个 private static synchronized File getInstance(String path) throws ZipException { if (map.containsKey(path)) { return map.get(path); } else { CompressedFile compressedFile = new CompressedFile(path); zipMap.put(path, compressedFile); return compressedFile; } } 2.使用FileLock锁确保同一时刻只有一个进程可以写文件,使用try with resource自动关闭文件流 public static String writeZipContent(String filePath, String subPath, InputStream fis) throws Exception { File zipFile = getInstance(filePath); synchronized (zipFile) { File f = new File(filePath); if (!f.getParentFile().exists()) { f.getParentFile().mkdirs(); } try (RandomAccessFile randomAccessFile = new RandomAccessFile(new File(zipFilePath + &quot;.lock&quot;), &quot;rws&quot;); FileChannel channel = randomAccessFile.getChannel()) { FileLock fileLock; do { fileLock = channel.lock(); } while (fileLock == null || !fileLock.isValid()); //do something return &quot;path&quot;; } catch (Exception ex) { logger.error(ex.getMessage(), ex); throw ex; } } } 补充说明在java.io.RandomAccessFile类的open方法，提供了参数实现独占的方式打开文件： RandomAccessFile raf = new RandomAccessFile(file, &quot;rws&quot;); 其中的“rws”参数，rw代表读取和写入，s代表了同步方式，也就是同步锁。 ​​]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>lock file</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring注解式事务详解]]></title>
+    <url>%2F2016%2F09%2F03%2FSpring%E6%B3%A8%E8%A7%A3%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[基础在了解事务的实现之前，我们有必要先了解下JPA.JPA（Java Persistence API，Java持久化API），定义了对象-关系映射（ORM）以及实体对象持久化的标准接口。 它维护一个Persistence Context（持久化上下文），在持久化上下文中维护实体的生命周期。主要包含三个方面的内容： ORM元数据。JPA支持annotion或xml两种形式描述对象-关系映射。 实体操作API。实现对实体对象的CRUD操作。 查询语言。约定了面向对象的查询语言JPQL（Java Persistence Query Language）。 JPA的主要API都定义在javax.persistence包中。如果你熟悉Hibernate，可以很容易做出对应： org.hibernate javax.persistence 说明 cfg.Configuration Persistence 读取配置信息 SessionFactory EntityManagerFactory 用于创建会话,实体管理器的工厂类 Session EntityManager 提供实体操作API,管理事务,创建查询 Transaction EntityTransaction 管理事务 Query Query 执行查询 ​​]]></content>
+      <categories>
+        <category>spring</category>
+      </categories>
+      <tags>
+        <tag>spring transaction</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Tomcat web.xml详解]]></title>
+    <url>%2F2016%2F09%2F03%2FTomcat-web.xml%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[web.xml配置文件常用元素 &lt;web-app&gt; &lt;!--定义了WEB应用的名字--&gt; &lt;display-name&gt;&lt;/display-name&gt; &lt;!--声明WEB应用的描述信息--&gt; &lt;description&gt;&lt;/description&gt; &lt;!--context-param元素声明应用范围内的初始化参数--&gt; &lt;context-param&gt;&lt;/context-param&gt; &lt;!--过滤器元素将一个名字与一个实现javax.servlet.Filter接口的类相关联--&gt; &lt;filter&gt;&lt;/filter&gt; &lt;!--一旦命名了一个过滤器，就要利用filter-mapping元素把它与一个或多个servlet或JSP页面相关联--&gt; &lt;filter-mapping&gt;&lt;/filter-mapping&gt; &lt;!--servlet API的版本2.3增加了对事件监听程序的支持，事件监听程序在建立、修改和删除会话或servlet环境时得到通知。Listener元素指出事件监听程序类--&gt; &lt;listener&gt;&lt;/listener&gt; &lt;!--在向servlet或JSP页面制定初始化参数或定制URL时，必须首先命名servlet或JSP页面。Servlet元素就是用来完成此项任务的--&gt; &lt;servlet&gt;&lt;/servlet&gt; &lt;!--服务器一般为servlet提供一个缺省的URL：http://host/webAppPrefix/servlet/ServletName。但是，常常会更改这个URL，以便servlet可以访问初始化参数或更容易地处理相对URL。在更改缺省URL时，使用servlet-mapping元素--&gt; &lt;servlet-mapping&gt;&lt;/servlet-mapping&gt; &lt;!--如果某个会话在一定时间内未被访问，服务器可以抛弃它以节省内存。可通过使用HttpSession的setMaxInactiveInterval方法明确设置单个会话对象的超时值，或者可利用session-config元素制定缺省超时值--&gt; &lt;session-config&gt;&lt;/session-config&gt; &lt;!--如果Web应用具有想到特殊的文件，希望能保证给他们分配特定的MIME类型，则mime-mapping元素提供这种保证--&gt; &lt;mime-mapping&gt;&lt;/mime-mapping&gt; &lt;!--指示服务器在收到引用一个目录名而不是文件名的URL时，使用哪个文件--&gt; &lt;welcome-file-list&gt;&lt;/welcome-file-list&gt; &lt;!--在返回特定HTTP状态代码时，或者特定类型的异常被抛出时，能够制定将要显示的页面--&gt; &lt;error-page&gt;&lt;/error-page&gt; &lt;!--对标记库描述符文件（Tag Libraryu Descriptor file）指定别名。此功能使你能够更改TLD文件的位置，而不用编辑使用这些文件的JSP页面--&gt; &lt;taglib&gt;&lt;/taglib&gt; &lt;!--声明与资源相关的一个管理对象--&gt; &lt;resource-env-ref&gt;&lt;/resource-env-ref&gt; &lt;!--声明一个资源工厂使用的外部资源--&gt; &lt;resource-ref&gt;&lt;/resource-ref&gt; &lt;!--制定应该保护的URL。它与login-config元素联合使用--&gt; &lt;security-constraint&gt;&lt;/security-constraint&gt; &lt;!--指定服务器应该怎样给试图访问受保护页面的用户授权。它与sercurity-constraint元素联合使用--&gt; &lt;login-config&gt;&lt;/login-config&gt; &lt;!--给出安全角色的一个列表，这些角色将出现在servlet元素内的security-role-ref元素的role-name子元素中。分别地声明角色可使高级IDE处理安全信息更为容易--&gt; &lt;security-role&gt;&lt;/security-role&gt; &lt;!--声明Web应用的环境项--&gt; &lt;env-entry&gt;&lt;/env-entry&gt; &lt;!--声明一个EJB的主目录的引用--&gt; &lt;ejb-ref&gt;&lt;/ejb-ref&gt; &lt;!--声明一个EJB的本地主目录的应用--&gt; &lt;ejb-local-ref&gt;&lt;/ejb-local-ref&gt; &lt;/web-app&gt;]]></content>
+      <categories>
+        <category>应用容器</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[博客迁移]]></title>
+    <url>%2F2016%2F06%2F01%2F%E6%95%B4%E7%90%86%E5%88%A0%E9%99%A4%2F</url>
+    <content type="text"><![CDATA[归纳整理博客分类 整理收藏的StackOverflow 解决办法,博客总结，整理知识内容，纠错并重新梳理排版。 整理码云，github个人项目中代码块，梳理知识点 开源中国，博客园，iteye,慕课上的总结整理 笔记与新知识整理归纳]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>其他</tag>
+      </tags>
+  </entry>
+</search>

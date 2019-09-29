@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="Spring注解式事务详解">
+<meta name="description" content="Spring事务基本概念">
 <meta name="keywords" content="spring transaction">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring注解式事务详解">
+<meta property="og:title" content="Spring事务基本概念">
 <meta property="og:url" content="http://yoursite.com/2016/09/03/Spring注解式事务详解/index.html">
 <meta property="og:site_name" content="樊冬">
-<meta property="og:description" content="Spring注解式事务详解">
+<meta property="og:description" content="Spring事务基本概念">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-29T11:47:07.307Z">
+<meta property="og:updated_time" content="2019-09-29T11:49:45.048Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring注解式事务详解">
-<meta name="twitter:description" content="Spring注解式事务详解">
+<meta name="twitter:title" content="Spring事务基本概念">
+<meta name="twitter:description" content="Spring事务基本概念">
 
 
 
@@ -142,7 +142,7 @@
 
 
 
-  <title>Spring注解式事务详解 | 樊冬</title>
+  <title>Spring事务基本概念 | 樊冬</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring注解式事务详解</h1>
+          <h1 class="post-title" itemprop="name headline">Spring事务基本概念</h1>
         
 
         <div class="post-meta">
@@ -355,7 +355,7 @@
 
           
               <div class="post-description">
-                  Spring注解式事务详解
+                  Spring事务基本概念
               </div>
           
 
@@ -372,7 +372,7 @@
       
 
       
-        <p><strong><strong>基础</strong></strong><br>事务隔离级别</p>
+        <p><strong><strong>事务隔离级别</strong></strong>     </p>
 <p>  隔离级别是指若干个并发的事务之间的隔离程度。TransactionDefinition 接口中定义了五个表示隔离级别的常量：     </p>
 <ul>
 <li>TransactionDefinition.ISOLATION_DEFAULT：这是默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，通常这值就是TransactionDefinition.ISOLATION_READ_COMMITTED。    </li>
@@ -381,7 +381,8 @@
 <li>TransactionDefinition.ISOLATION_REPEATABLE_READ：该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。该级别可以防止脏读和不可重复读。       </li>
 <li>TransactionDefinition.ISOLATION_SERIALIZABLE：所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
 </ul>
-<p>事务传播行为<br>所谓事务的传播行为是指，如果在开始当前事务之前，一个事务上下文已经存在，此时有若干选项可以指定一个事务性方法的执行行为。在TransactionDefinition定义中包括了如下几个表示传播行为的常量：</p>
+<p><strong><strong>事务传播行为</strong></strong> </p>
+<p>所谓事务的传播行为是指，如果在开始当前事务之前，一个事务上下文已经存在，此时有若干选项可以指定一个事务性方法的执行行为。在TransactionDefinition定义中包括了如下几个表示传播行为的常量：</p>
 <ul>
 <li>TransactionDefinition.PROPAGATION_REQUIRED：如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。这是默认值。</li>
 <li>TransactionDefinition.PROPAGATION_REQUIRES_NEW：创建一个新的事务，如果当前存在事务，则把当前事务挂起。</li>
@@ -391,8 +392,9 @@
 <li>TransactionDefinition.PROPAGATION_MANDATORY：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。</li>
 <li>TransactionDefinition.PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于TransactionDefinition.PROPAGATION_REQUIRED。</li>
 </ul>
-<p>事务超时<br>所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。<br>默认设置为底层事务系统的超时值，如果底层数据库事务系统没有设置超时值，那么就是none，没有超时限制。</p>
-<p>spring事务回滚规则<br>指示spring事务管理器回滚一个事务的推荐方法是在当前事务的上下文内抛出异常。spring事务管理器会捕捉任何未处理的异常，然后依据规则决定是否回滚抛出异常的事务。 默认配置下，spring只有在抛出的异常为运行时unchecked异常时才回滚该事务，也就是抛出的异常为RuntimeException的子类(Errors也会导致事务回滚)，而抛出checked异常则不会导致事务回滚。可以明确的配置在抛出那些异常时回滚事务，包括checked异常。也可以明确定义那些异常抛出时不回滚事务。还可以编程性的通过setRollbackOnly()方法来指示一个事务必须回滚，在调用完setRollbackOnly()后你所能执行的唯一操作就是回滚。</p>
+<p><strong><strong>事务超时</strong></strong> </p>
+<p>所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。<br>默认设置为底层事务系统的超时值，如果底层数据库事务系统没有设置超时值，那么就是none，没有超时限制。</p>
+<p><strong><strong>spring事务回滚规则</strong></strong><br>指示spring事务管理器回滚一个事务的推荐方法是在当前事务的上下文内抛出异常。spring事务管理器会捕捉任何未处理的异常，然后依据规则决定是否回滚抛出异常的事务。默认配置下，spring只有在抛出的异常为运行时unchecked异常时才回滚该事务，也就是抛出的异常为RuntimeException的子类(Errors也会导致事务回滚)，而抛出checked异常则不会导致事务回滚。可以明确的配置在抛出那些异常时回滚事务，包括checked异常。也可以明确定义那些异常抛出时不回滚事务。还可以编程性的通过setRollbackOnly()方法来指示一个事务必须回滚，在调用完setRollbackOnly()后你所能执行的唯一操作就是回滚。</p>
 <p>​<br>​</p>
 
       

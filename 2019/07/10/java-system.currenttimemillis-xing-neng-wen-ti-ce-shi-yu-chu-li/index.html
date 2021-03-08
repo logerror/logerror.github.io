@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh-CN">
+<html lang="en">
 
 
 <head><meta name="generator" content="Hexo 3.8.0">
@@ -57,7 +57,7 @@
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
-      <span>首页</span>
+      <span>Index</span>
     </a>
     
   </li>
@@ -68,7 +68,7 @@
       
       <i class="fas fa-tags" style="zoom: 0.6;"></i>
       
-      <span>标签</span>
+      <span>Tags</span>
     </a>
     
   </li>
@@ -79,7 +79,7 @@
       
       <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
       
-      <span>分类</span>
+      <span>Categories</span>
     </a>
     
   </li>
@@ -90,7 +90,7 @@
       
       <i class="fas fa-archive" style="zoom: 0.6;"></i>
       
-      <span>归档</span>
+      <span>Archives</span>
     </a>
     
   </li>
@@ -101,7 +101,7 @@
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
-      <span>关于</span>
+      <span>About</span>
     </a>
     
   </li>
@@ -112,7 +112,7 @@
       
       <i class="fas fa-comments" style="zoom: 0.6;"></i>
       
-      <span>留言板</span>
+      <span>Contact</span>
     </a>
     
   </li>
@@ -123,14 +123,14 @@
       
       <i class="fas fa-address-book" style="zoom: 0.6;"></i>
       
-      <span>友情链接</span>
+      <span>Friends</span>
     </a>
     
   </li>
   
   <li>
     <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
     </a>
   </li>
 </ul>
@@ -160,7 +160,7 @@
 			
 			    <i class="fa-fw fas fa-home"></i>
 			
-			首页
+			Index
 		</a>
           
         </li>
@@ -171,7 +171,7 @@
 			
 			    <i class="fa-fw fas fa-tags"></i>
 			
-			标签
+			Tags
 		</a>
           
         </li>
@@ -182,7 +182,7 @@
 			
 			    <i class="fa-fw fas fa-bookmark"></i>
 			
-			分类
+			Categories
 		</a>
           
         </li>
@@ -193,7 +193,7 @@
 			
 			    <i class="fa-fw fas fa-archive"></i>
 			
-			归档
+			Archives
 		</a>
           
         </li>
@@ -204,7 +204,7 @@
 			
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
-			关于
+			About
 		</a>
           
         </li>
@@ -215,7 +215,7 @@
 			
 			    <i class="fa-fw fas fa-comments"></i>
 			
-			留言板
+			Contact
 		</a>
           
         </li>
@@ -226,7 +226,7 @@
 			
 			    <i class="fa-fw fas fa-address-book"></i>
 			
-			友情链接
+			Friends
 		</a>
           
         </li>
@@ -452,7 +452,7 @@
             <div class="post-info">
                 
                 <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
                     2019-07-10
                 </div>
                 
@@ -469,7 +469,15 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
         
 
         <div class="card-content article-card-content">
@@ -498,9 +506,29 @@
 <p><strong><strong>解决思路</strong></strong></p>
 <p>网上的解决方法有很多：   </p>
 <ol>
-<li>维护一个全局缓存，使用单线程调度器器按毫秒更新时间戳，用到了 <code>ScheduledThreadPoolExecutor</code>，代码如下    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class SystemClock &#123;</span><br><span class="line">    private static final SystemClock MILLIS_CLOCK = new SystemClock(1);</span><br><span class="line">    private final long precision;</span><br><span class="line">    private final AtomicLong now;</span><br><span class="line"></span><br><span class="line">    private SystemClock(long precision) &#123;</span><br><span class="line">        this.precision = precision;</span><br><span class="line">        now = new AtomicLong(System.currentTimeMillis());</span><br><span class="line">        scheduleClockUpdating();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static SystemClock millisClock() &#123;</span><br><span class="line">        return MILLIS_CLOCK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void scheduleClockUpdating() &#123;</span><br><span class="line">        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(runnable -&gt; &#123;</span><br><span class="line">            Thread thread = new Thread(runnable, &quot;system.clock&quot;);</span><br><span class="line">            thread.setDaemon(true);</span><br><span class="line">            return thread;</span><br><span class="line">        &#125;);</span><br><span class="line">        scheduler.scheduleAtFixedRate(() -&gt; now.set(System.currentTimeMillis()), precision, precision, TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public long now() &#123;</span><br><span class="line">        return now.get();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<li><p>维护一个全局缓存，使用单线程调度器器按毫秒更新时间戳，用到了 <code>ScheduledThreadPoolExecutor</code>，代码如下<br><code>`</code><br>public class SystemClock {<br> private static final SystemClock MILLIS_CLOCK = new SystemClock(1);<br> private final long precision;<br> private final AtomicLong now;</p>
+<p> private SystemClock(long precision) {</p>
+<pre><code> this.precision = precision;
+ now = new AtomicLong(System.currentTimeMillis());
+ scheduleClockUpdating();
+</code></pre><p> }</p>
+<p> public static SystemClock millisClock() {</p>
+<pre><code> return MILLIS_CLOCK;
+</code></pre><p> }</p>
+<p> private void scheduleClockUpdating() {</p>
+<pre><code> ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(runnable -&gt; {
+     Thread thread = new Thread(runnable, &quot;system.clock&quot;);
+     thread.setDaemon(true);
+     return thread;
+ });
+ scheduler.scheduleAtFixedRate(() -&gt; now.set(System.currentTimeMillis()), precision, precision, TimeUnit.MILLISECONDS);
+</code></pre><p> }</p>
+<p> public long now() {</p>
+<pre><code> return now.get();
+</code></pre><p> }</p>
 </li>
 </ol>
+<p><code>`</code></p>
 <p>​<br>​</p>
 
                 
@@ -514,7 +542,7 @@
             <div class="reprint__author">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-user">
-                        文章作者:
+                        Author:
                     </i>
                 </span>
                 <span class="reprint-info">
@@ -524,23 +552,23 @@
             <div class="reprint__type">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-link">
-                        文章链接:
+                        Link:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://oom.welights.net/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/">https://oom.welights.net/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/</a>
+                    <a href="https://oom.welights.net/2019/07/10/java-system.currenttimemillis-xing-neng-wen-ti-ce-shi-yu-chu-li/">https://oom.welights.net/2019/07/10/java-system.currenttimemillis-xing-neng-wen-ti-ce-shi-yu-chu-li/</a>
                 </span>
             </div>
             <div class="reprint__notice">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-copyright">
-                        版权声明:
+                        Reprint policy:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    本博客所有文章除特別声明外，均采用
+                    All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    许可协议。转载请注明来源
+                    reprint polocy. If reproduced, please indicate source
                     <a href="/about" target="_blank">FanDong</a>
                     !
                 </span>
@@ -550,7 +578,7 @@
 
     <script async defer>
       document.addEventListener("copy", function (e) {
-        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
@@ -984,7 +1012,7 @@
         visitor: 'true' === 'true',
         avatar: 'mm',
         pageSize: '10',
-        lang: 'zh-cn',
+        lang: 'en',
         placeholder: 'stay here'
     });
 </script>
@@ -1004,9 +1032,9 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2019/07/12/Java中的拷贝模式/">
+                <a href="/2019/07/12/java-zhong-de-kao-bei-mo-shi/">
                     <div class="card-image">
                         
                         
@@ -1052,10 +1080,10 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/12/使用RateLimiter限制访问频率/">
+                <a href="/2019/06/12/shi-yong-ratelimiter-xian-zhi-fang-wen-pin-lu/">
                     <div class="card-image">
                         
                         
@@ -1126,7 +1154,7 @@
     </div>
     <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
         <div class="toc-widget card" style="background-color: white;">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
             <div id="toc-content"></div>
         </div>
     </div>
@@ -1341,8 +1369,8 @@
 <div id="searchModal" class="modal">
     <div class="modal-content">
         <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input">
         </div>
         <div id="searchResult"></div>
     </div>

@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<html lang="zh-CN">
+<html lang="en">
 
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="使用RateLimiter限制访问频率, Java">
+    <meta name="keywords" content="websoket构建站内通知, Java">
     <meta name="description" content>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>使用RateLimiter限制访问频率 | NeoKeeper</title>
+    <title>websoket构建站内通知 | NeoKeeper</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -57,7 +57,7 @@
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
-      <span>首页</span>
+      <span>Index</span>
     </a>
     
   </li>
@@ -68,7 +68,7 @@
       
       <i class="fas fa-tags" style="zoom: 0.6;"></i>
       
-      <span>标签</span>
+      <span>Tags</span>
     </a>
     
   </li>
@@ -79,7 +79,7 @@
       
       <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
       
-      <span>分类</span>
+      <span>Categories</span>
     </a>
     
   </li>
@@ -90,7 +90,7 @@
       
       <i class="fas fa-archive" style="zoom: 0.6;"></i>
       
-      <span>归档</span>
+      <span>Archives</span>
     </a>
     
   </li>
@@ -101,7 +101,7 @@
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
-      <span>关于</span>
+      <span>About</span>
     </a>
     
   </li>
@@ -112,7 +112,7 @@
       
       <i class="fas fa-comments" style="zoom: 0.6;"></i>
       
-      <span>留言板</span>
+      <span>Contact</span>
     </a>
     
   </li>
@@ -123,14 +123,14 @@
       
       <i class="fas fa-address-book" style="zoom: 0.6;"></i>
       
-      <span>友情链接</span>
+      <span>Friends</span>
     </a>
     
   </li>
   
   <li>
     <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
     </a>
   </li>
 </ul>
@@ -160,7 +160,7 @@
 			
 			    <i class="fa-fw fas fa-home"></i>
 			
-			首页
+			Index
 		</a>
           
         </li>
@@ -171,7 +171,7 @@
 			
 			    <i class="fa-fw fas fa-tags"></i>
 			
-			标签
+			Tags
 		</a>
           
         </li>
@@ -182,7 +182,7 @@
 			
 			    <i class="fa-fw fas fa-bookmark"></i>
 			
-			分类
+			Categories
 		</a>
           
         </li>
@@ -193,7 +193,7 @@
 			
 			    <i class="fa-fw fas fa-archive"></i>
 			
-			归档
+			Archives
 		</a>
           
         </li>
@@ -204,7 +204,7 @@
 			
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
-			关于
+			About
 		</a>
           
         </li>
@@ -215,7 +215,7 @@
 			
 			    <i class="fa-fw fas fa-comments"></i>
 			
-			留言板
+			Contact
 		</a>
           
         </li>
@@ -226,7 +226,7 @@
 			
 			    <i class="fa-fw fas fa-address-book"></i>
 			
-			友情链接
+			Friends
 		</a>
           
         </li>
@@ -307,12 +307,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">使用RateLimiter限制访问频率</h1>
+                    <h1 class="description center-align post-title">websoket构建站内通知</h1>
                 </div>
             </div>
         </div>
@@ -428,8 +428,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/qps-ratelimiter/">
-                                <span class="chip bg-color">qps ratelimiter</span>
+                            <a href="/tags/websocket/">
+                                <span class="chip bg-color">websocket</span>
                             </a>
                         
                     </div>
@@ -440,8 +440,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java/" class="post-category">
-                                Java
+                            <a href="/categories/websocket/" class="post-category">
+                                websocket
                             </a>
                         
                     </div>
@@ -452,8 +452,8 @@
             <div class="post-info">
                 
                 <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-04-10
                 </div>
                 
 
@@ -469,42 +469,127 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
         
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong><strong>背景</strong></strong><br>通过查看接口访问日志发现某个注册接口请求量突然暴涨，并引发连锁反应，导致整个系统变慢。系统已经对接口做了做了权限认证，包含token认证，时效认证，禁用启用等功能，但没有对访问频率做限制，除了需要优化处理逻辑外，也要加上对接口的访问频率限制，以防止非预期的请求对系统压力过大而引起的系统瘫痪，当流量过大时，可以采取拒绝或者引流等机制。</p>
-<p><strong><strong>原因及方案分析</strong></strong>    </p>
-<p>常用的限流算法有两种：漏桶算法和令牌桶算法。</p>
-<p>漏桶(Leaky Bucket)算法思路很简单,水(请求)先进入到漏桶里,漏桶以一定的速度出水(接口有响应速率),当水流入速度过大会直接溢出(访问频率超过接口响应速率),然后就拒绝请求,可以看出漏桶算法能强行限制数据的传输速率。但是漏桶的漏出速率是固定的参数,所以,即使网络中不存在资源冲突(没有发生拥塞),漏桶算法也不能使流突发(burst)到端口速率.因此,漏桶算法对于存在突发特性的流量来说缺乏效率.<br><img src="https://i.imgur.com/doxSzsv.png" alt><br>令牌桶算法(Token Bucket)和 Leaky Bucket 效果一样但方向相反的算法,更加容易理解.随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.令牌桶的另外一个好处是可以方便的改变速度. 一旦需要提高速率,则按需提高放入桶中的令牌的速率. 一般会定时(比如100毫秒)往桶中增加一定数量的令牌, 有些变种算法则实时的计算应该增加的令牌的数量.</p>
-<p><img src="https://i.imgur.com/WCQ32wH.png" alt><br><strong><strong>解决思路</strong></strong></p>
-<p>使用令牌桶算法限制接口访问频率sss。</p>
+                <p><strong><strong>背景</strong></strong><br>传统的报表或者统计展示都是统计一段时间的数据，然后由网页发起接口调用进而展示数据，对于一些不需要实时展示的内容来说是可以，但对于一些需要即时看到并处理的信息则可能会延后。</p>
+<p><strong><strong>原因</strong></strong>    </p>
+<p>网页端定时获取数据可能会造成信息的滞后，对于一些需要立即处理的事件可能会延误。</p>
+<p><strong><strong>解决思路</strong></strong></p>
+<p>不再使用前端定时调用接口的形式获取数据，使用websocket来即时从后台推送数据到前端。</p>
+<ol>
+<li>使用主流长连接框架netty实现websocket功能。</li>
+<li>使用jJavaEE7支持的@ServerEndpoint注解实现websocket。</li>
+</ol>
+<p>若使用netty实现，性能会较好，但需要新启端口用于netty的连接与端口监听（默认为8888），使用注解实现则可以共用web 8080端口，减轻了实施的工作量，企业用户也无需新开防火墙申请变更，因此使用@ServerEndpoint实现websocket达到实时发送信息的目的。（在之前的章节提到了如何使用netty来做心跳检测以及信息传递）</p>
 <p><strong><strong>详细实现</strong></strong>    </p>
-<p>   Google开源工具包Guava提供了限流工具类RateLimiter，该类基于令牌桶算法来完成限流，非常易于使用。在项目中用了以下实现 </p>
-<p>   1.频率是可以设置的，所以要存储初始值，频率发生改变时调用setRate方法即可，需要注意的是setRate的意义是每秒允许多少次访问，参数是一个double类型的值</p>
-<pre><code>RateLimiter rateLimit = RestComponentFactory.interfaceRateMap.getOrDefault(interfaceVo.getToken(), null);
-Double newRateLimit = interfaceVo.getQps();
-if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
-    if(rateLimit == null){
-        rateLimit = RateLimiter.create(interfaceVo.getQps());
-        RestComponentFactory.interfaceRateMap.put(interfaceVo.getToken(), rateLimit);
-    }else{
-        if(rateLimit.getRate() != newRateLimit){
-            rateLimit.setRate(newRateLimit);
+<p>1.在类上使用注解@ServerEndpoint，并指定编解码类，因为实际场景的数据不只是字符串那么简单，一般都是json对象。还需实现  onOpen onClose onError三个方法，用于处理打开，关闭，异常时的处理场景。 同时onMessage方法用户处理客户端向服务端发送信息时的处理逻辑。       </p>
+<pre><code>import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import javax.websocket.*;
+import javax.websocket.server.ServerEndpoint;
+
+@ServerEndpoint(value = &quot;/websocket&quot;, encoders = {MessageEncoder.class })
+public class SystemRemindSocketServer {
+
+    private Logger logger = LoggerFactory.getLogger(SystemRemindSocketServer.class);
+
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException, InterruptedException, EncodeException {
+        //暂时无需处理网页端发送的信息
+        //test
+        //        for(int i = 0;i&lt;5;i++){
+        //            JSONObject data = new JSONObject();
+        //            data.put(&quot;icon&quot;,&quot;ts-component&quot;);
+        //            data.put(&quot;taskId&quot;,1386);
+        //            data.put(&quot;time&quot;,&quot;2019-03-26 14:31:30&quot;);
+        //            data.put(&quot;title&quot;,&quot;当时明月在,曾照彩云归.&quot;);
+        //            data.put(&quot;link&quot;,&quot;/&quot;);
+        //            data.put(&quot;template&quot;,&quot;balantflow.systemremind.message.flow&quot;);
+        //            session.getBasicRemote().sendText(data.toString());
+        //        }
+    }
+
+    @OnOpen
+    public void onOpen(Session session) {
+        String userId = session.getUserPrincipal().getName();
+        String sessionId = session.getId();
+        SystemRemindMessageManager.sessionMap.put(userId, session);
+
+    }
+
+    @OnClose
+    public void onClose(Session session) {
+        String userId = session.getUserPrincipal().getName();
+        SystemRemindMessageManager.sessionMap.remove(userId);
+    }
+
+    @OnError
+    public void onError(Throwable t) {
+        logger.error(&quot;web socket error ,&quot; + t.getMessage());
+    }
+}
+</code></pre><p>  2.编解码类的实现，直接用jsonobject格式化即可   </p>
+<pre><code>public class MessageEncoder implements Encoder.Text&lt;SystemRemindMessageVo&gt; {
+
+    @Override
+    public void destroy() {
+
+
+    }
+
+    @Override
+    public void init(EndpointConfig arg0) {
+
+
+    }
+
+    @Override
+    public String encode(SystemRemindMessageVo messagepojo) throws EncodeException {
+        try {
+            return JSONObject.fromObject(messagepojo).toString();
+        } catch (Exception e) {
+            return null;
         }
     }
 
-    boolean rateFlag = rateLimit.tryAcquire();
-    if(!rateFlag){
-        throw new Exception470();
-    }
 }
-</code></pre><p><strong><strong>补充说明</strong></strong><br>RateLimiter类位于  </p>
-<p>com.google.common.util.concurrent.RateLimiter</p>
-<pre><code>&lt;artifactId&gt;guava&lt;/artifactId&gt;
-&lt;groupId&gt;com.google.guava&lt;/groupId&gt;
-</code></pre><p>​<br>​</p>
+</code></pre><p>3.前端建立连接与数据处理    </p>
+<pre><code>$(function(){
+    //启动时建立连接
+    var notifyws = new WebSocket(&quot;ws://localhost:8080/balantflow/websocket&quot;);
+    notifyws.onopen = function(evt) { 
+         //console.log(evt);
+    };
+
+    //后台发送消息时的处理逻辑
+    notifyws.onmessage = function(evt) {
+        var newnotify = [];
+        newnotify.push(JSON.parse(evt.data));
+        updateInstant(newnotify);
+    };
+
+    //断开后重新连接
+    notifyws.onclose = function(evt) {
+        notifyws = new WebSocket(&quot;ws://localhost:8080/balantflow/websocket&quot;);
+    };
+})
+</code></pre><p><strong><strong>补充说明</strong></strong><br>部署环境时要注意修改websocket配置，因为在用户机器上连接localhost:8080是没用的，要改为具体的websocket地址</p>
+<p>​<br>​</p>
 
                 
             </div>
@@ -517,7 +602,7 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
             <div class="reprint__author">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-user">
-                        文章作者:
+                        Author:
                     </i>
                 </span>
                 <span class="reprint-info">
@@ -527,23 +612,23 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
             <div class="reprint__type">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-link">
-                        文章链接:
+                        Link:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://oom.welights.net/2019/06/12/使用RateLimiter限制访问频率/">https://oom.welights.net/2019/06/12/使用RateLimiter限制访问频率/</a>
+                    <a href="https://oom.welights.net/2019/04/10/websocket-gou-jian-zhan-nei-tong-zhi/">https://oom.welights.net/2019/04/10/websocket-gou-jian-zhan-nei-tong-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
                 <span class="reprint-meta" style="font-weight: bold;">
                     <i class="fas fa-copyright">
-                        版权声明:
+                        Reprint policy:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    本博客所有文章除特別声明外，均采用
+                    All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    许可协议。转载请注明来源
+                    reprint polocy. If reproduced, please indicate source
                     <a href="/about" target="_blank">FanDong</a>
                     !
                 </span>
@@ -553,7 +638,7 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
 
     <script async defer>
       document.addEventListener("copy", function (e) {
-        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
@@ -569,8 +654,8 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/qps-ratelimiter/">
-                                    <span class="chip bg-color">qps ratelimiter</span>
+                                <a href="/tags/websocket/">
+                                    <span class="chip bg-color">websocket</span>
                                 </a>
                             
                         </div>
@@ -987,7 +1072,7 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
         visitor: 'true' === 'true',
         avatar: 'mm',
         pageSize: '10',
-        lang: 'zh-cn',
+        lang: 'en',
         placeholder: 'stay here'
     });
 </script>
@@ -1007,15 +1092,15 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/">
+                <a href="/2019/06/12/shi-yong-ratelimiter-xian-zhi-fang-wen-pin-lu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Java_System.currentTimeMillis()性能问题测试与处理">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="使用RateLimiter限制访问频率">
                         
-                        <span class="card-title">Java_System.currentTimeMillis()性能问题测试与处理</span>
+                        <span class="card-title">使用RateLimiter限制访问频率</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1026,7 +1111,7 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-07-10
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-06-12
                         </span>
                         <span class="publish-author">
                             
@@ -1043,8 +1128,8 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/性能-时间戳/">
-                        <span class="chip bg-color">性能 时间戳</span>
+                    <a href="/tags/qps-ratelimiter/">
+                        <span class="chip bg-color">qps ratelimiter</span>
                     </a>
                     
                 </div>
@@ -1055,16 +1140,16 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/04/10/websocket构建站内通知/">
+                <a href="/2017/08/12/java-jin-cheng-jian-wen-jian-suo/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="websoket构建站内通知">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Java进程间共享锁">
                         
-                        <span class="card-title">websoket构建站内通知</span>
+                        <span class="card-title">Java进程间共享锁</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1075,14 +1160,14 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-04-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2017-08-12
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/websocket/" class="post-category">
-                                    websocket
+                            <a href="/categories/Java/" class="post-category">
+                                    Java
                                 </a>
                             
                             
@@ -1092,8 +1177,8 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/websocket/">
-                        <span class="chip bg-color">websocket</span>
+                    <a href="/tags/lock-file/">
+                        <span class="chip bg-color">lock file</span>
                     </a>
                     
                 </div>
@@ -1129,7 +1214,7 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
     </div>
     <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
         <div class="toc-widget card" style="background-color: white;">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
             <div id="toc-content"></div>
         </div>
     </div>
@@ -1344,8 +1429,8 @@ if(interfaceVo.getQps()!= null &amp;&amp; interfaceVo.getQps() &gt; 0){
 <div id="searchModal" class="modal">
     <div class="modal-content">
         <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input">
         </div>
         <div id="searchResult"></div>
     </div>

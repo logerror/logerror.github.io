@@ -4,7 +4,7 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Java_System.currentTimeMillis()性能问题测试与处理, Java">
+    <meta name="keywords" content="Java中的拷贝模式, Java">
     <meta name="description" content>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java_System.currentTimeMillis()性能问题测试与处理 | NeoKeeper</title>
+    <title>Java中的拷贝模式 | NeoKeeper</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -307,12 +307,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java_System.currentTimeMillis()性能问题测试与处理</h1>
+                    <h1 class="description center-align post-title">Java中的拷贝模式</h1>
                 </div>
             </div>
         </div>
@@ -428,8 +428,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/性能-时间戳/">
-                                <span class="chip bg-color">性能 时间戳</span>
+                            <a href="/tags/java-io/">
+                                <span class="chip bg-color">java io</span>
                             </a>
                         
                     </div>
@@ -440,8 +440,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java/" class="post-category">
-                                Java
+                            <a href="/categories/java/" class="post-category">
+                                java
                             </a>
                         
                     </div>
@@ -453,7 +453,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-07-10
+                    2019-07-12
                 </div>
                 
 
@@ -474,34 +474,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong><strong>背景</strong></strong><br>新项目打算做前后端分离，需要关注接口的响应时间，以便在出现问题时定位到是哪个接口，记得偶然看到获取多线程并发环境下该方法对性能可能会有影响，因此在项目前期做一个小测试。         </p>
-<p><strong><strong>过程</strong></strong>    </p>
-<p>System.currentTimeMillis()在java中是最常用的获取系统时间的方法，它返回的是1970年1月1日0点到现在经过的毫秒数。    我们看以看到它在Java中的实现为：<br><code>public static native long currentTimeMillis();</code> </p>
-<p>native关键字说明这个方法底层是由C语言实现的，我们稍后在讲，先做一个简单的测试。</p>
-<p>这次测试电脑配置为 Intel(R) Core(TM) i7-8550 16内存。测试很简单10000次for循环调用和多线程10000次调用，直接看结果：<br>单线程下10000次调用消耗时间为 6713300 ns<br>多线程下10000次调用消耗时间为 4968593100 ns  </p>
-<p>可以看到相差还是比较大的,在串行情况下这个api其实性能很好，但是在并发情况下回急剧下降，原因在于计时器在所有进程之间共享，并且其还一直在发生变化，当大量线程尝试同时去访问计时器的时候，就涉及到资源的竞争，于是也就出现并行效率远低于串行效率的现象了。所以在高并发场景下要慎重使用System.nanoTime()和System.currentTimeMillis()这两个API。  </p>
-<p>在搜索过程中我找到的一篇大家都比较信服的文章来解释为什么会这样，连接如下:<br><a href="http://pzemtsov.github.io/2017/07/23/the-slow-currenttimemillis.html" title="The slow currentTimeMillis()" target="_blank" rel="noopener">http://pzemtsov.github.io/2017/07/23/the-slow-currenttimemillis.html</a>    </p>
-<p>​</p>
-<p>文章很长，讲的很详细，甚至从汇编语言的角度讲了为什么会这样，有几个比较重要的观点： </p>
-<blockquote>
-<ul>
-<li>调用gettimeofday()需要从用户态切换到内核态；   </li>
-<li>gettimeofday()的表现受Linux系统的计时器（时钟源）影响，在HPET计时器下性能尤其差；   </li>
-<li>系统只有一个全局时钟源，高并发或频繁访问会造成严重的争用</li>
-</ul>
-</blockquote>
-<p>HPET计时器问题在处理器层面已经解决<br>处理器系列以不同方式增加时间戳计数器：</p>
-<blockquote>
-<p>对于奔腾M处理器（系列[06H]，型号[09H，0DH]）；对于奔腾4处理器，英特尔至强处理器（系列[0FH]，型号[00H，01H或02H]）；对于P6系列处理器：时间戳记计数器会随着每个内部处理器时钟周期的增加而增加。内部处理器时钟周期由当前内核时钟与总线时钟之比确定。英特尔®SpeedStep®技术过渡也可能会影响处理器时钟。</p>
-<p>对于奔腾4处理器，英特尔至强处理器（系列[0FH]，型号[03H及更高版本]）；适用于Intel Core Solo和Intel Core Duo处理器（系列[06H]，型号[0EH]）；用于Intel Xeon处理器5100系列和Intel Core 2 Duo处理器（系列[06H]，型号[0FH]）；适用于Intel Core 2和Intel Xeon处理器（系列[06H]，DisplayModel [17H]）；对于Intel Atom处理器（系列[06H]，DisplayModel [1CH]）：时间戳记计数器以恒定速率递增。  </p>
-</blockquote>
-<p><strong><strong>解决思路</strong></strong></p>
-<p>网上的解决方法有很多：   </p>
-<ol>
-<li>维护一个全局缓存，使用单线程调度器器按毫秒更新时间戳，用到了 <code>ScheduledThreadPoolExecutor</code>，代码如下    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class SystemClock &#123;</span><br><span class="line">    private static final SystemClock MILLIS_CLOCK = new SystemClock(1);</span><br><span class="line">    private final long precision;</span><br><span class="line">    private final AtomicLong now;</span><br><span class="line"></span><br><span class="line">    private SystemClock(long precision) &#123;</span><br><span class="line">        this.precision = precision;</span><br><span class="line">        now = new AtomicLong(System.currentTimeMillis());</span><br><span class="line">        scheduleClockUpdating();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static SystemClock millisClock() &#123;</span><br><span class="line">        return MILLIS_CLOCK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void scheduleClockUpdating() &#123;</span><br><span class="line">        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(runnable -&gt; &#123;</span><br><span class="line">            Thread thread = new Thread(runnable, &quot;system.clock&quot;);</span><br><span class="line">            thread.setDaemon(true);</span><br><span class="line">            return thread;</span><br><span class="line">        &#125;);</span><br><span class="line">        scheduler.scheduleAtFixedRate(() -&gt; now.set(System.currentTimeMillis()), precision, precision, TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public long now() &#123;</span><br><span class="line">        return now.get();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>​<br>​</p>
+                <h1 id="拷贝实现机制"><a href="#拷贝实现机制" class="headerlink" title="拷贝实现机制"></a>拷贝实现机制</h1><p>不同拷贝方法，底层实现是有着比较大的区别的，这里列举两个比较典型的文件拷贝</p>
+<h2 id="典型的文件拷贝实现方式"><a href="#典型的文件拷贝实现方式" class="headerlink" title="典型的文件拷贝实现方式"></a>典型的文件拷贝实现方式</h2><h3 id="利用-java-io-类库"><a href="#利用-java-io-类库" class="headerlink" title="利用 java.io 类库"></a>利用 java.io 类库</h3><p>用流读入 然后 写到输出流<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">copyFileByStream</span><span class="params">(File source, File dest)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	<span class="keyword">try</span> (InputStream is = <span class="keyword">new</span> FileInputStream(source);</span><br><span class="line">		OutputStream os = <span class="keyword">new</span> FileOutputStream(dest);)&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="keyword">int</span> length;</span><br><span class="line">		<span class="keyword">while</span> ((length = is.read(buffer)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			os.write(buffer, <span class="number">0</span>, length);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="利用java-nio-类库"><a href="#利用java-nio-类库" class="headerlink" title="利用java.nio 类库"></a>利用java.nio 类库</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">copyFileByChannel</span><span class="params">(File source, File dest)</span> <span class="keyword">throws</span></span></span><br><span class="line"><span class="function">IOException </span>&#123;</span><br><span class="line">	<span class="keyword">try</span> (FileChannel sourceChannel = <span class="keyword">new</span> FileInputStream(source)</span><br><span class="line">	.getChannel();</span><br><span class="line">	FileChannel targetChannel = <span class="keyword">new</span> FileOutputStream(dest).getChannel</span><br><span class="line">	();)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">long</span> count = sourceChannel.size() ;count&gt;<span class="number">0</span> ;) &#123;</span><br><span class="line">			<span class="keyword">long</span> transferred = sourceChannel.transferTo(</span><br><span class="line">			sourceChannel.position(), count, targetChannel); 						sourceChannel.position(sourceChannel.position() + transferred);</span><br><span class="line">			count -= transferred;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>NIO transferTo/From 的方式能利用现代操作系统底层机制，避免不必要拷贝和上下文切换, 理论上会更快</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><h2 id="理论知识"><a href="#理论知识" class="headerlink" title="理论知识"></a>理论知识</h2><p>用户态空间和内核态空间是操作系统层面的基本概念。（我们可以参考下这篇文章 <a href="https://en.wikipedia.org/wiki/User_space" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/User_space</a> ）<br>操作系统内核、硬件驱动等运行在内核态空间，具有相对高的特权；而用户态空间，则是给普通应用和服务使用。当我们使用输入输出流进行读写时，实际上是进行了多次上下文切换，比如应用读取数据时，先在内核态将数据从磁盘读取到内核缓存，再切换到用户态将数据从内核缓存读取到用户缓存。这种方式会带来一定的额外开销。</p>
+<p>NIO transferTo 的实现方式，在 Linux 和 Unix 上，则会使用到零拷贝技术，数据传输并不需要用户态参与，省去了上下文切换的开销和不必要的内存拷贝，进而可能提高应用拷贝性能。注意，transferTo 不仅仅是可以用在文件拷贝中，与其类似的，例如读取磁盘文件，然后进行 Socket 发送，同样可以享受这种机制带来的性能和扩展性提高。</p>
+<h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p>Java 标准库也提供了文件拷贝方法（java.nio.file.Files.copy）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static Path copy(Path source, Path target, CopyOption... options)</span><br><span class="line"></span><br><span class="line">throws IOException</span><br><span class="line"></span><br><span class="line">public static long copy(InputStream in, Path target, CopyOption... options)</span><br><span class="line"></span><br><span class="line">throws IOException</span><br><span class="line"></span><br><span class="line">public static long copy(Path source, OutputStream out) </span><br><span class="line"></span><br><span class="line">throws IOException</span><br></pre></td></tr></table></figure>
+<p>后面两种 copy 实现，能够在方法实现里直接看到使用的是 InputStream.transferTo()，你可以直接看源码，其内部实现其实是 stream 在用户态的读写；而对于第一种方法的分析过程则有些区别。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static Path copy(Path source, Path target, CopyOption... options)</span><br><span class="line">throws IOException</span><br><span class="line">&#123;</span><br><span class="line">FileSystemProvider provider = provider(source);</span><br><span class="line">if (provider(target) == provider) &#123;</span><br><span class="line">// same provider</span><br><span class="line">provider.copy(source, target, options);//重点</span><br><span class="line">&#125; else &#123;</span><br><span class="line">// different providers</span><br><span class="line">CopyMoveHelper.copyToForeignTarget(source, target, options);</span><br><span class="line">&#125;</span><br><span class="line">return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>FileSystemProvider 只是个抽象类，阅读它的源码能够理解到，原来文件系统实际逻辑存在于 JDK 内部实现里，公共 API 其实是通过 ServiceLoader 机制加载一系列文件系统实现，然后提供服务。在 JDK 源码中搜索 FileSystemProvider 和 nio，可以定位到sun/nio/fs，我们知道 NIO 底层是和操作系统紧密相关的，所以每个平台都有自己的部分特有文件系统逻辑。最后我们一步步定位到 UnixFileSystemProvider → UnixCopyFile.Transfer，发现这是个本地方法。最后，明确定位到UnixCopyFile.c，其内部实现清楚说明竟然只是简单的用户态空间拷贝！原文如下（ Transfer all bytes from src to dst via user-space buffers）， 有兴趣的可以看下源文件（<a href="http://hg.openjdk.java.net/jdk/jdk/file/f84ae8aa5d88/src/java.base/unix/native/libnio/fs/UnixCopyFile.c" target="_blank" rel="noopener">http://hg.openjdk.java.net/jdk/jdk/file/f84ae8aa5d88/src/java.base/unix/native/libnio/fs/UnixCopyFile.c</a><br>）<br>所以，我们明确这个最常见的 copy 方法其实不是利用 transferTo，而是本地技术实现的用户态拷贝。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>使用 transferTo 等机制，减少上下文切换和额外 IO 操作。尽量减少不必要的转换过程，比如编解码；对象序列化和反序列化，比如操作文本文件或者网络通信，如果不是过程中需要使用文本信息，可以考虑不要将二进制信息转换成字符串，直接传输二进制信息。</p>
 
                 
             </div>
@@ -528,7 +512,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://oom.welights.net/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/">https://oom.welights.net/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/</a>
+                    <a href="https://oom.welights.net/2019/07/12/Java中的拷贝模式/">https://oom.welights.net/2019/07/12/Java中的拷贝模式/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -566,8 +550,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/性能-时间戳/">
-                                    <span class="chip bg-color">性能 时间戳</span>
+                                <a href="/tags/java-io/">
+                                    <span class="chip bg-color">java io</span>
                                 </a>
                             
                         </div>
@@ -1004,7 +988,8 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2019/07/12/Java中的拷贝模式/">
                     <div class="card-image">
@@ -1022,9 +1007,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-07-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-07-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1037,6 +1022,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1055,13 +1041,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/12/使用RateLimiter限制访问频率/">
+                <a href="/2019/07/10/Java_System.currentTimeMillis()性能问题测试与处理/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="使用RateLimiter限制访问频率">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Java_System.currentTimeMillis()性能问题测试与处理">
                         
-                        <span class="card-title">使用RateLimiter限制访问频率</span>
+                        <span class="card-title">Java_System.currentTimeMillis()性能问题测试与处理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1072,7 +1058,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-07-10
                             </span>
                         <span class="publish-author">
                             
@@ -1089,8 +1075,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/qps-ratelimiter/">
-                        <span class="chip bg-color">qps ratelimiter</span>
+                    <a href="/tags/性能-时间戳/">
+                        <span class="chip bg-color">性能 时间戳</span>
                     </a>
                     
                 </div>

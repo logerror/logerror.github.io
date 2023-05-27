@@ -1,10 +1,11 @@
 ---
-title: websoket构建站内通知   
-date: 2019-04-10 20:05:32   
-categories: "websocket"  
-tags: [websocket]    
+title: websoket构建站内通知
+categories: websocket
+tags:
+  - websocket
 description: websoket构建站内通知
-
+abbrlink: 549604128
+date: 2019-04-10 20:05:32
 ---
 
 ****背景****     

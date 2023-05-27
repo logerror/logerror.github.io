@@ -1,10 +1,11 @@
 ---
-title: Java进程间共享锁   
-date: 2017-08-12 11:47:44   
-categories: "Java"  
-tags: [lock file]    
+title: Java进程间共享锁
+categories: Java
+tags:
+  - lock file
 description: Java进程间共享锁
-
+abbrlink: 2202924434
+date: 2017-08-12 11:47:44
 ---
 
 ****背景****     

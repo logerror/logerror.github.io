@@ -1,10 +1,11 @@
 ---
-title: Spring事务基本概念  
-date: 2016-09-03 23:47:44   
-categories: "spring"  
-tags: [spring transaction]    
+title: Spring事务基本概念
+categories: spring
+tags:
+  - spring transaction
 description: Spring事务基本概念
-
+abbrlink: 1205372785
+date: 2016-09-03 23:47:44
 ---
 
 ****事务隔离级别****     

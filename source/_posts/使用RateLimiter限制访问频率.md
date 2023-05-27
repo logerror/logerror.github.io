@@ -1,10 +1,11 @@
 ---
-title: 使用RateLimiter限制访问频率   
-date: 2019-06-12 17:23:44   
-categories: "Java"  
-tags: [qps ratelimiter]    
+title: 使用RateLimiter限制访问频率
+categories: Java
+tags:
+  - qps ratelimiter
 description: 使用RateLimiter限制访问频率
-
+abbrlink: 1900677851
+date: 2019-06-12 17:23:44
 ---
 
 ****背景****     

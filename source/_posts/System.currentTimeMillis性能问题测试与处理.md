@@ -1,10 +1,11 @@
 ---
-title: System.currentTimeMillis性能问题测试与处理   
-date: 2019-07-10 10:21:52   
-categories: "Java"  
-tags: [性能 时间戳]    
-description: Java_System.currentTimeMillis()性能问题测试与处理    
-
+title: System.currentTimeMillis性能问题测试与处理
+categories: Java
+tags:
+  - 性能 时间戳
+description: Java_System.currentTimeMillis()性能问题测试与处理
+abbrlink: 4201659447
+date: 2019-07-10 10:21:52
 ---
 
 ****背景****     

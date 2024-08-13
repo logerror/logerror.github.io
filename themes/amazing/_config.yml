@@ -80,7 +80,7 @@ navbar:
         标签: /tags
         影音: /media
 #        相册: /album
-        友链: /friend
+#        友链: /friend
 #        碎碎念: /self-talking
         留言: /message
         关于: /about
@@ -246,7 +246,7 @@ widgets:
         position: left
         type: profile
         # Author name
-        author: ElevenRadar
+        author: Dong Fan
         # Author title
         author_title: 长远的看，一切都在变好
         # Author's current location
@@ -258,21 +258,15 @@ widgets:
         # Email address for the Gravatar
         gravatar: 
         # URL or path for the follow button
-        follow_link: 'https://github.com/ppoffice'
+        follow_link: 'https://github.com/logerror'
         # Links to be shown on the bottom of the profile widget
         social_links:
             Github:
                 icon: fab fa-github
-                url: 'https://github.com/removeif'
-            Weibo:
-                icon: fab fa-weibo
-                url: 'https://weibo.com/removeif'
+                url: 'https://github.com/logerror'
             Email:
                 icon: fa fa-envelope
-                url: 'mailto:removeif@163.com'
-            Next:
-                icon: fab fa-dribbble
-                url: 'https://removeif.github.io/remove.io'
+                url: 'mailto:freedom521fd@163.com'
             RSS:
                 icon: fas fa-rss
                 url: /atom.xml
@@ -400,5 +394,5 @@ website_start_time: 2018/11/11 00:00:00 #网站运行开始时间,不填不显�
 footer_registered_no: 川ICP备88888888号-8（测试） #备案号
 side_music_netease_id: 2364053447 #侧边栏网易云歌单id
 busuanzi_only_count: false #当上面plugins中busuanzi: true时，此配置busuanzi_only_count为true时，网站不显示不蒜子统计数据，但是会每次统计。false时显示统计数据。
-has_live_2D_switch: true #live2D开关 true-开 false-关
+has_live_2D_switch: false #live2D开关 true-开 false-关
 use_pjax: true #是否pjax

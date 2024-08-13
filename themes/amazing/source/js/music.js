@@ -65,7 +65,8 @@ $.getJSON("../json_data/video.json", function (data) {
         $li.attr('id', i);
         $li.click(function (event) {
             var id = Number(this.id);
-            playVideo(data[id],id);
+            // playVideo(data[id],id);
+            window.open(data[i].url,'_blank')
             $('#video-list #' + lastVideoIndex).css('color', '#888888');
             lastVideoIndex = id;
         });
